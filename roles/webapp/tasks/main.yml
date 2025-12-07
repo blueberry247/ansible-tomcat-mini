@@ -14,6 +14,14 @@
     group: tomcat
     mode: "0644"
 
+- name: Deploy demo WAR
+  copy:
+    src: sample.war
+    dest: /opt/tomcat/current/webapps/demo.war
+    owner: tomcat
+    group: tomcat
+    mode: "0644"
+
 - name: Restart Tomcat service
   service:
     name: tomcat
