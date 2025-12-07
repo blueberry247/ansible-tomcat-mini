@@ -1,0 +1,6 @@
+- name: Deploy demo webapp to Tomcat
+  hosts: deb-01
+  become: true
+
+  roles:
+    - role: webapp

@@ -1,0 +1,21 @@
+- name: Ensure Tomcat ROOT directory exists
+  file:
+    path:  /opt/tomcat/current/webapps/ROOT
+    state: directory
+    owner: tomcat
+    group: tomcat
+    mode: "0755"
+
+- name: Deploy index.html into ROOT
+  template:
+    src: index.html.j2
+    dest:  /opt/tomcat/current/webapps/ROOT/index.html
+    owner: tomcat
+    group: tomcat
+    mode: "0644"
+
+- name: Restart Tomcat service
+  service:
+    name: tomcat
+    state: restarted
+
