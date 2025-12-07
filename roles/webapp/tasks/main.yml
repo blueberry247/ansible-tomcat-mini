@@ -19,3 +19,11 @@
     name: tomcat
     state: restarted
 
+- name: Check HTTP health
+  uri:
+    url: http://deb-01:8080/
+    status_code: 200
+  register: http_check
+  retries: 10
+  delay: 3
+  until: http_check.status == 200
