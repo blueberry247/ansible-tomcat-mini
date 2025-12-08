@@ -1,0 +1,23 @@
+---
+- name: Ensure docker_webapp directory exists
+  file:
+    path: /opt/docker_webapp
+    state: directory
+    mode: "0755"
+
+- name: Copy index.html to host
+  copy:
+    src: index.html
+    dest: /opt/docker_webapp/index.html
+    mode: "0644"
+
+- name: Run Nginx container for docker_webapp
+  community.docker.docker_container:
+    name: docker-webapp
+    image: nginx:alpine
+    state: started
+    restart_policy: unless-stopped
+    published_ports:
+      - "8081:80"
+    volumes:
+      - "/opt/docker_webapp:/usr/share/nginx/html:ro"

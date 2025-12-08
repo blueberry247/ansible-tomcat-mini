@@ -1,0 +1,7 @@
+---
+- name: Run Docker webapp on Deb-01
+  hosts: deb-01
+  become: yes
+
+  roles:
+    - docker_webapp

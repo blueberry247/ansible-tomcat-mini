@@ -1,0 +1,15 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Deploy Docker webapp to Deb-01') {
+            steps {
+                sh '''
+                  cd $WORKSPACE
+                  ansible-playbook -i inventory.yml docker-webapp.yml
+                '''
+            }
+        }
+    }
+}
+
