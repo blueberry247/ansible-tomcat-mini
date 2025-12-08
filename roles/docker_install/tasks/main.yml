@@ -1,0 +1,51 @@
+---
+# roles/docker_install/tasks/main.yml
+
+- name: Install required packages
+  apt:
+    name:
+      - ca-certificates
+      - curl
+      - gnupg
+    state: present
+    update_cache: yes
+
+- name: Create keyrings directory
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+
+- name: Add Docker GPG key
+  ansible.builtin.command:
+    cmd: >
+      bash -c "curl -fsSL https://download.docker.com/linux/debian/gpg |
+      gpg --dearmor -o /etc/apt/keyrings/docker.gpg"
+  args:
+    creates: /etc/apt/keyrings/docker.gpg
+
+- name: Add Docker APT repository
+  copy:
+    dest: /etc/apt/sources.list.d/docker.list
+    content: |
+      deb [arch={{ ansible_architecture }} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian {{ ansible_facts['lsb']['codename'] }} stable
+    mode: "0644"
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install Docker Engine
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    state: present
+
+- name: Enable and start Docker service
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
